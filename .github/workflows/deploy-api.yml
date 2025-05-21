@@ -1,0 +1,27 @@
+name: Deploy API to Azure API Management
+
+on:
+  push:
+    branches:
+      - develop  # deploy only when develop is updated
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Run APIOps DevOps pipeline
+      uses: Azure/apiops@v0.2.4
+      with:
+        apim_name: hxlearn-apim
+        resource_group: HXlearn-RG
+        api_directory: environments/dev/apis
+
+
